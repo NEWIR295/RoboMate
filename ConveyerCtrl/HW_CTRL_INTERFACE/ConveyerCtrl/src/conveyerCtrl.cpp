@@ -28,7 +28,7 @@ int checkLevel(void);
 */
 enum Level
 {
-    LEVEL1,
+    LEVEL1 = 1, // Represents Level 1 = 1
     LEVEL2,
     LEVEL3,
     NO_LEVEL // Represents no level detected = 4
@@ -43,7 +43,7 @@ std_msgs::String posMsg;
 // std_msgs::String emptyString;
 
 /* Publisher for position message */
-ros::Publisher pub("/pos_msg", &posMsg);
+ros::Publisher pub("/current_position", &posMsg);
 
 /* global var for level target flag for IR sensors */
 std_msgs::Int8 targetLevel;
@@ -124,12 +124,21 @@ void conveyerMove(void)
                         write here the conveyer belt logic for steeper control
                         If the current level is equal to the target level, stop the motors
                         This is where you can implement logic for the conveyer belt to stop or perform other actions.
-                        it may include a subscriber to a topic that controls the conveyer belt
+                        it will include a subscriber to a topic that controls the conveyer belt, also make it separate
+                        node from level control node.
                     */
 
                     posMsg.data = "Stopped"; // Set the position message to indicate stopped state
                 }
             }
+            else
+            {
+                // If no target level is set, stop the motors
+                digitalWrite(MOTOR_PIN1, LOW);
+                digitalWrite(MOTOR_PIN2, LOW);
+                posMsg.data = "No Target Level"; // Set the position message to indicate no target level
+            }
+            
             pub.publish(&posMsg);        // Publish the position message
             currentLevel = checkLevel(); // Get the current level from the IR sensors
             prevTime = currentTime;      // Update the previous time
@@ -139,14 +148,11 @@ void conveyerMove(void)
 
 int checkLevel(void)
 {
-
-    int level = 4; // Default to NO_LEVEL (4)
-
     // Read the current level from the IR sensors
     int sensorArray[] = {
         digitalRead(IR_LEVEL1_PIN), digitalRead(IR_LEVEL2_PIN), digitalRead(IR_LEVEL3_PIN)};
 
-    for (int i = 0; i < 3; i++)
+    for (int i = LEVEL1; i < NO_LEVEL; i++)
     {
         if (sensorArray[i] == HIGH)
         {
@@ -154,5 +160,5 @@ int checkLevel(void)
         }
     }
     // If no sensor is triggered, return NO_LEVEL
-    return level; // NO_LEVEL
+    return NO_LEVEL; // NO_LEVEL
 }
