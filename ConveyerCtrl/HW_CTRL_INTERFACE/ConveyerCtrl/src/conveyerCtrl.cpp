@@ -165,7 +165,8 @@ int checkLevel(void)
 
     for (int i = 0; i < 3; i++)
     {
-        if (sensorArray[i] == HIGH)
+        /* Check if the sensor is triggered (LOW means object detected) */
+        if (sensorArray[i] == LOW)
         {
             return i + 1;
         }
