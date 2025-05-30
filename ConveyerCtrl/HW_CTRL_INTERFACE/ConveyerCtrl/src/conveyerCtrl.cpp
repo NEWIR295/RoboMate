@@ -138,7 +138,7 @@ void conveyerMove(void)
                 // If no target level is set, stop the motors
                 digitalWrite(MOTOR_PIN1, LOW);
                 digitalWrite(MOTOR_PIN2, LOW);
-                posMsg.data = "No Target Level"; // Set the position message to indicate no target level
+                posMsg.data = "Stopped"; // Set the position message to indicate stopped state
             }
 
             /*
@@ -152,7 +152,6 @@ void conveyerMove(void)
                 pub.publish(&posMsg);     // Publish the position message
             }
 
-            currentLevel = checkLevel(); // Get the current level from the IR sensors
             prevTime = currentTime;      // Update the previous time
         }
     }
