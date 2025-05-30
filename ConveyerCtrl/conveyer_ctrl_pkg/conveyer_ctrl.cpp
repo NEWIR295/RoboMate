@@ -75,10 +75,10 @@ int main(int argc, char **argv)
             If the input is invalid, it will prompt again.
         */
         std::cout << "Please enter target level:\n"
-                  << "1: Level 1\n"
-                  << "2: Level 2\n"
-                  << "3: Level 3\n"
-                  << "4: No Level (Stop)\n";
+                  << "              1: Level 1\n"
+                  << "              2: Level 2\n"
+                  << "              3: Level 3\n"
+                  << "              4: No Level (Stop)\n";
         std::cin >> targetLevel.data;
         // Validate input
         if (targetLevel.data < static_cast<int>(Level::LEVEL1) || targetLevel.data > static_cast<int>(Level::NO_LEVEL))
@@ -105,12 +105,13 @@ int main(int argc, char **argv)
                 std::cerr << "No current position state message received yet.\n";
             }
 
+            ros::spinOnce(); // Process incoming messages
             // Sleep to avoid busy waiting
             ros::Duration(0.5).sleep();
         }
 
         // Print the current position
-        std::cout << "Level " << targetLevel << " reached\n";
+        std::cout << "Level " << targetLevel.data << " reached\n";
 
         // Sleep to maintain the loop rate
         loop_rate.sleep();

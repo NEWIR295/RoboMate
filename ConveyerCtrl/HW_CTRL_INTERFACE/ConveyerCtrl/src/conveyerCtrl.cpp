@@ -15,10 +15,10 @@
     This function reads the state of the IR sensors and returns the level detected.
     Returns:
         int: The level detected by the IR sensors, represented as an integer.
-        - LEVEL1: 0
-        - LEVEL2: 1
-        - LEVEL3: 2
-        - NO_LEVEL: 3 (if no level is detected)
+        - LEVEL1: 1
+        - LEVEL2: 2
+        - LEVEL3: 3
+        - NO_LEVEL: 4 (if no level is detected)
 */
 int checkLevel(void);
 
@@ -47,6 +47,8 @@ ros::Publisher pub("/current_position", &posMsg);
 
 /* global var for level target flag for IR sensors */
 std_msgs::Int8 targetLevel;
+/* last status of publishing */
+String lastStatus = "";
 
 /* subscriber cb for target level */
 void callback(const std_msgs::Int8 &levelMsg)
@@ -138,8 +140,18 @@ void conveyerMove(void)
                 digitalWrite(MOTOR_PIN2, LOW);
                 posMsg.data = "No Target Level"; // Set the position message to indicate no target level
             }
-            
-            pub.publish(&posMsg);        // Publish the position message
+
+            /*
+                Publish the position message if it has changed.
+                This is done to avoid unnecessary publishing of the same message.
+                It checks if the last status is different from the current position message.
+            */
+            if (lastStatus != posMsg.data) // Check if the position message has changed
+            {
+                lastStatus = posMsg.data; // Update the last status to the current position message
+                pub.publish(&posMsg);     // Publish the position message
+            }
+
             currentLevel = checkLevel(); // Get the current level from the IR sensors
             prevTime = currentTime;      // Update the previous time
         }
@@ -152,11 +164,11 @@ int checkLevel(void)
     int sensorArray[] = {
         digitalRead(IR_LEVEL1_PIN), digitalRead(IR_LEVEL2_PIN), digitalRead(IR_LEVEL3_PIN)};
 
-    for (int i = LEVEL1; i < NO_LEVEL; i++)
+    for (int i = 0; i < 3; i++)
     {
         if (sensorArray[i] == HIGH)
         {
-            return i;
+            return i + 1;
         }
     }
     // If no sensor is triggered, return NO_LEVEL
