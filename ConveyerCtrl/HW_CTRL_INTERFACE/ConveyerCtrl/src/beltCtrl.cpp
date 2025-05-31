@@ -20,8 +20,8 @@ AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
 enum direction
 {
     FORWARD = 1,   // Move the belt forward
-    BACKWARD = -1, // Move the belt backward
-    STOP = 0       // Stop the belt
+    BACKWARD, // Move the belt backward
+    STOP      // Stop the belt
 };
 
 enum pkgStatus
@@ -84,7 +84,12 @@ void beltMove(void)
     else
     {
         // If the target direction is STOP, stop the belt
-        stepper.stop(); // Stop the stepper motor
+
+        /*
+            stepper.stop() better than stepper.setSpeed(0) because it only stops the motor 
+            after completing the current acceleration ramp
+        */
+        stepper.stop(); 
     }
 
     /* 
@@ -97,21 +102,21 @@ void beltMove(void)
     //     int pkgStatus = checkIN_OUT_pkg(); // Get the package status
     //     if (pkgStatus == IN_PKG)
     //     {
-    //         pkgMsg.data = "Package Detected at Input"; // Set message for input package detection
+    //         pkgMsg.data = "IN_PKG"; // Set message for input package detection
     //     }
     //     else if (pkgStatus == OUT_PKG)
     //     {
-    //         pkgMsg.data = "Package Detected at Output"; // Set message for output package detection
+    //         pkgMsg.data = "OUT_PKG"; // Set message for output package detection
     //     }
     //     else
     //     {
-    //         pkgMsg.data = "No Package Detected"; // Set message for no package detection
+    //         pkgMsg.data = "NO_PKG_DETECTED"; // Set message for no package detection
     //         stepper.stop();                      // Stop the stepper motor if no package is detected
     //     }
     // }
     // else
     // {
-    //     pkgMsg.data = "No Package Detected"; // Set message for no package detection
+    //     pkgMsg.data = "NO_PKG_DETECTED"; // Set message for no package detection
     //     stepper.stop();                      // Stop the stepper motor if no package is detected
     // }
 

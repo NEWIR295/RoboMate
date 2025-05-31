@@ -79,6 +79,9 @@ int main(int argc, char **argv)
                   << "              2: Level 2\n"
                   << "              3: Level 3\n"
                   << "              4: No Level (Stop)\n";
+        std::cout << "Enter a number (1-4) to set the target level: ";
+
+        // Read user input for target level
         std::cin >> targetLevel.data;
         // Validate input
         if (targetLevel.data < static_cast<int>(Level::LEVEL1) || targetLevel.data > static_cast<int>(Level::NO_LEVEL))
