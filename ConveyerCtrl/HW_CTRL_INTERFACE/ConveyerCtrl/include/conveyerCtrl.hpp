@@ -10,8 +10,8 @@
                 and provides functions for conveyer control and movement.
 */
 
-#ifndef CONVEYERCTRL_HPP
-#define CONVEYERCTRL_HPP
+#ifndef CONVEYER_CTRL_HPP
+#define CONVEYER_CTRL_HPP
 
 /*
     used libraries:
@@ -52,4 +52,4 @@ extern ros::NodeHandle nh; // Declare the nh object as external
 void conveyerCtrlInit(void);
 void conveyerMove(void);
 
-#endif // CONVEYERCTRL_HPP
+#endif // CONVEYER_CTRL_HPP

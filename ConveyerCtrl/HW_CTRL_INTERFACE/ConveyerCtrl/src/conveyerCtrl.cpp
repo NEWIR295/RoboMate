@@ -1,14 +1,15 @@
 /*
-    Author: Mohamed Newir
-    Date: 3/05/2025
-    File: conveyerCtrl.cpp
-    Description:
-                Implementation file for the conveyer control system using ROS and Arduino.
-                This file contains the definitions of functions for initializing the conveyer control system,
-                moving the conveyer, checking the current level using IR sensors, and handling ROS communication.
+Author: Mohamed Newir
+Date: 3/05/2025
+File: conveyerCtrl.cpp
+Description:
+Implementation file for the conveyer control system using ROS and Arduino.
+This file contains the definitions of functions for initializing the conveyer control system,
+moving the conveyer, checking the current level using IR sensors, and handling ROS communication.
 */
 
 #include "../include/conveyerCtrl.hpp"
+#include "../include/beltCtrl.hpp"
 
 /*
     Function to check the current level of the conveyer using IR sensors.
@@ -83,6 +84,8 @@ void conveyerCtrlInit(void)
 
     currentLevel = checkLevel(); // Get the initial level from the IR sensors
     // emptyString.data = ""; // Initialize an empty String object
+
+    beltCtrlInit(); // Initialize the belt control system
 }
 
 void conveyerMove(void)
@@ -130,6 +133,7 @@ void conveyerMove(void)
                         node from level control node.
                     */
 
+                    beltMove();              // Call the beltMove function to handle the conveyer belt logic
                     posMsg.data = "Stopped"; // Set the position message to indicate stopped state
                 }
             }
@@ -152,7 +156,7 @@ void conveyerMove(void)
                 pub.publish(&posMsg);     // Publish the position message
             }
 
-            prevTime = currentTime;      // Update the previous time
+            prevTime = currentTime; // Update the previous time
         }
     }
 }

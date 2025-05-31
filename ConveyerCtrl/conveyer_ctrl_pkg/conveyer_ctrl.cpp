@@ -1,7 +1,7 @@
 /*
     Author: Mohamed Newir
     Date: 3/05/2025
-    File: main.cpp
+    File: conveyer_ctrl.cpp
     Description:
                     Main file for the conveyer control system using ROS and Arduino.
                     This file initializes the ROS node and the conveyer control system,
