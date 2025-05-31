@@ -16,7 +16,7 @@ int checkIN_OUT_pkg(void);
 // Initialize the stepper motor
 AccelStepper stepper(AccelStepper::DRIVER, STEP_PIN, DIR_PIN);
 
-//
+// Define the direction and package status enums
 enum direction
 {
     FORWARD = 1,   // Move the belt forward
